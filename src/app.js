@@ -5,22 +5,26 @@ const authRouter = require("./routes/authRoutes");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const passport = require("passport");
 
 const app = express();
 const PORT = process.env.PORT;
 
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(console.log("mongodb connection established"));
+  .then(() => console.log("MongoDB connection established"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
+// Set up view engine and views
 app.set("view engine", "ejs");
 app.set("views", path.resolve(__dirname, "views"));
 
+// Middleware for parsing requests
 app.use(express.urlencoded({ extended: true }));
-
-app.set("trust proxy", 1); // trust first proxy
 app.use(express.json());
 
+// Session configuration
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -28,20 +32,26 @@ app.use(
     saveUninitialized: true,
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
-      collectionName: "sessions",  //name of collection where we will be string our sessions
+      collectionName: "sessions",
     }),
     cookie: {
-      maxAge: 60000 * 60 * 24,  //it is like a timer for the cookie 1 day
+      maxAge: 60000 * 60 * 24, // 1 day
     },
   })
 );
 
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Routes
 app.use("/", authRouter);
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
 
-app.listen(PORT, (req, res) => {
-  console.log(`Server is:${process.env.PORT}`);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

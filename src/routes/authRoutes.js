@@ -4,6 +4,9 @@ const User = require("../models/user"); // Correct import of the User model
 const { hashSync } = require("bcrypt");
 const passport = require("passport");
 
+// here we are importing the middleware
+require("../middlware/authentication");
+
 router.get("/", function (req, res) {
   res.redirect("/register");
 });
@@ -36,9 +39,11 @@ router.get("/login", function (req, res) {
   res.render("login");
 });
 
+// here use the middleware
+// first paramerter is strategy and second is callback
 router.post(
   "/login",
-  passport.authenticate("local", { successRedirect: "/logged" })
+  passport.authenticate("local", { successRedirect: "logged" })
 );
 
 router.get("/logged", function (req, res) {

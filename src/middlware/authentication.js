@@ -35,13 +35,14 @@ passport.use(
 
 // session configuration. we have to write this two functions whenever we are using the session
 // this will persist the data inside session
+// this will add our userid to session body
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
 // this will fetch the session object/details based on the session id that is stored inside session object
 passport.deserializeUser(function (id, done) {
-  User.findById(id).then((user) => {
-    done(null, user);
-  });
+  const user=User.findById(id)
+  if(!user) return done(err)
+  return done(null, user)
 });

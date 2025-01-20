@@ -46,7 +46,21 @@ router.post(
   passport.authenticate("local", { successRedirect: "logged" })
 );
 
+router.get("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) return next(err);
+    res.redirect("/login");
+    console.log(req.session);
+    console.log(req.user);
+  }); 
+});
+
 router.get("/logged", function (req, res) {
+  // also we can declare it as like is the boolean value of isAuthenticated() is true the send logged
+  if(isAuthenticated()) return res.send('logged')
+  else res.status(401).send({message:'unauthorized'})
+  console.log(req.session);
+  console.log(req.user);
   res.send("logged");
 });
 

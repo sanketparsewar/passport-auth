@@ -32,7 +32,6 @@ router.post("/register", function (req, res) {
       console.error("Error saving user:", err);
       res.status(500).send("Error saving user");
     });
-  //   res.send({ success: true });
 });
 
 router.get("/login", function (req, res) {
@@ -40,7 +39,7 @@ router.get("/login", function (req, res) {
 });
 
 // here use the middleware
-// first paramerter is strategy and second is callback
+// first paramerter is passport strategy and second is callback
 router.post(
   "/login",
   passport.authenticate("local", { successRedirect: "logged" })

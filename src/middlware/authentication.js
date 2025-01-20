@@ -18,13 +18,13 @@ passport.use(
       //   return done(err);
       // }
 
-      //   the first paramerter is actual password and the second paramerter is encrypted password store in database
+      //   the first paramerter for compareSync is actual password and the second paramerter is encrypted password stored in database
       // here we are using the compareSync function from the bcrypt that helps us to decrypt and compare both the passwords
       // this inbuild function does some decryptions at its end
       if (!compareSync(password, user.password)) {
         return done(null, false, { message: "Incorrect password" });
       }
-      //   here the first parameter of done null means no error occur and second parameter is for user
+      //   here the first parameter of done is null means no error occur and second parameter is for user
       return done(null, user);
     } catch (err) {
       console.log("err");
@@ -37,7 +37,7 @@ passport.use(
 // this will persist the data inside session
 // this will add our userid to session body
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  done(null, user.id);   //no error has occured and userId is saved
 });
 
 // this will fetch the session object/details based on the session id that is stored inside session object

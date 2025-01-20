@@ -24,7 +24,8 @@ app.set("views", path.resolve(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Session configuration
+// session configuration,Session code get from documentation 
+// creating a collection name sessions and storing the sessions inside it
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -35,7 +36,7 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      maxAge: 60000 * 60 * 24, // 1 day
+      maxAge: 60000 * 60 * 24, // 1 day expiry
     },
   })
 );
